@@ -110,7 +110,8 @@ void rotate(t_stack *stack)
 	temp = stack[0].value;
 	while (k < i - 1)
 	{
-		stack[k] = stack[k + 1];
+		stack[k].value = stack[k + 1].value;
+        stack[k].index = k;
 		k++;
 	}
 	stack[i - 1].value = temp;
@@ -120,7 +121,6 @@ void rev_rotate(t_stack *stack)
 {
 	int temp;
 	int i = count_elems(stack);
-	int k = 0;
 	temp = stack[i - 1].value;
 	while (i > 0)
 	{
@@ -135,11 +135,9 @@ void push(t_stack *from, t_stack *to)
 {
 	int	i;
 	int k;
-	// int temp;
 
 	i = count_elems(to) + 1;
 	k = 0;
-	// temp = stack
 	while (i > 0)
 	{
 		to[i].value = to[i - 1].value;
@@ -163,18 +161,26 @@ int	main(int ac, char **av)
 	t_stack *stack_b;
 	char **list;
 	int i = 0;
-	int amount_of_elements = ft_count_words(av[1], ' ');
-
+    
 	if (ac == 2)
-		list = ft_split(av[1], ' ');
-	stack_a = malloc(sizeof(t_stack) * (amount_of_elements + 1));
-	stack_b = malloc(sizeof(t_stack) * (amount_of_elements + 1));
+        list = ft_split(av[1], ' ');
+    else 
+        return 0;
+	int amount_of_elements = ft_count_words(av[1], ' ');
+	stack_a = malloc(sizeof(t_stack) * amount_of_elements + 1);
+	stack_b = malloc(1);
 	while(i < amount_of_elements)
 	{
 		stack_a[i].value = atoi(list[i]);
 		stack_a[i].index = i;
 		i++;
 	}
+    stack_a[i].value = 0;
+    stack_a[i].index = 0;    
+
+
+
+
 	stack_b[0].value = 1;
 	stack_b[1].value = 5;
 	stack_b[2].value = 7;
@@ -183,12 +189,22 @@ int	main(int ac, char **av)
 	stack_b[1].index = 1;
 	stack_b[2].index = 2;
 
-	printf("stack_a = %d-%d, %d-%d, %d-%d, %d-%d\n", stack_a[0].index, stack_a[0].value, stack_a[1].index, stack_a[1].value, stack_a[2].index, stack_a[2].value, stack_a[3].index, stack_a[3].value);
+	printf("stack_a = %d)%d\t%d)%d\t%d)%d\t%d)%d\n", stack_a[0].index, stack_a[0].value, stack_a[1].index, stack_a[1].value, stack_a[2].index, stack_a[2].value, stack_a[3].index, stack_a[3].value);
 	// printf("stack_b = %d, %d, %d, %d\n\n", stack_b[0].value, stack_b[1].value, stack_b[2].value, stack_b[3].value);
-	rotate(stack_a);
-	printf("stack_a = %d-%d, %d-%d, %d-%d, %d-%d\n", stack_a[0].index, stack_a[0].value, stack_a[1].index, stack_a[1].value, stack_a[2].index, stack_a[2].value, stack_a[3].index, stack_a[3].value);
+	swap(stack_a);
+    // rotate(stack_a);
+	printf("stack_a = %d)%d\t%d)%d\t%d)%d\t%d)%d\n", stack_a[0].index, stack_a[0].value, stack_a[1].index, stack_a[1].value, stack_a[2].index, stack_a[2].value, stack_a[3].index, stack_a[3].value);
 	// printf("stack_b = %d, %d, %d, %d\n", stack_b[0].value, stack_b[1].value, stack_b[2].value, stack_b[3].value);
-	free(stack_a);
-	free(stack_b);
+    
+    
+    
+    free(stack_b);
+    free(stack_a);
+    i = 0;
+    while(i < amount_of_elements)
+    {
+        free(list[i]);
+        i++;
+    }
 	free(list);
 }
