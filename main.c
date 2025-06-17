@@ -1,11 +1,13 @@
 #include<unistd.h>
 #include<stdio.h>
 #include<stdlib.h>
+#include <limits.h>
 
 typedef struct	s_stack
 {
 	int	value;
 	int	index;
+	int target;
 }				t_stack;
 
 static int	ft_count_words(char const *s, char c)
@@ -176,9 +178,70 @@ void push(t_stack *from, t_stack *to)
 //         sort_three(stack_a);
 //     while(amount > 0)
 //     {
-//         sort()
+//         sort();
 //     }
 // }
+
+int	find_index_of_min(t_stack *stack)
+{
+	int i = 1;
+	int len = count_elems(stack);
+	int temp = 0;
+	while(i < len)
+	{
+		if(stack[i].value < stack[temp].value)
+			temp = i;
+		i++;
+	}
+	return (temp);
+}
+int	find_index_of_max(t_stack *stack)
+{
+	int i = 1;
+	int len = count_elems(stack);
+	int temp = 0;
+	while(i < len)
+	{
+		if(stack[i].value > stack[temp].value)
+			temp = i;
+		i++;
+	}
+	return (temp);
+}
+int	find_index_of_closest_smaller(int number, t_stack *stack)
+{
+	int i = 0;
+	int len = count_elems(stack);
+	int hold = INT_MIN;
+	int temp = -1;
+	while(i < len)
+	{
+		if(stack[i].value > hold && stack[i].value < number)
+		{
+			hold = stack[i].value;
+			temp = i;
+		}
+		i++;
+	}
+	return (temp);
+}
+
+
+void set_targets_descend(t_stack *stack_a, t_stack *stack_b)	
+{
+	int ac;
+	int i;
+
+	i = 0;
+	ac = count_elems(stack_a);
+		while (i < ac)			
+		{
+			stack_a[i].target = find_index_of_closest_smaller(stack_a[i].value, stack_b);
+			if(stack_a[i].target == -1)
+				stack_a[i].target = find_index_of_max(stack_b);
+			i++;
+		}
+}
 
 int	main(int ac, char **av)
 {
@@ -199,36 +262,20 @@ int	main(int ac, char **av)
 	{
 		stack_a[i].value = atoi(list[i]);
 		stack_a[i].index = i;
+		// stack_a[i].target = 0;
 		i++;
 	}
     stack_a[i].value = 0;
     stack_a[i].index = -1;  
 
     stack_b[0].value = 0;
-    stack_b[0].index = -1;  
-    // do_the_thing(stack_a, stack_b);
+    stack_b[0].index = -1; 
 
-
-	// stack_b[0].value = 1;
-	// stack_b[1].value = 5;
-	// stack_b[2].value = 7;
-
-	// stack_b[0].index = 0;
-	// stack_b[1].index = 1;
-	// stack_b[2].index = 2;
-
-	// printf("stack_a = %d)%d\t%d)%d\t%d)%d\t%d)%d\n", stack_a[0].index, stack_a[0].value, stack_a[1].index, stack_a[1].value, stack_a[2].index, stack_a[2].value, stack_a[3].index, stack_a[3].value);
-	// // printf("stack_b = %d, %d, %d, %d\n\n", stack_b[0].value, stack_b[1].value, stack_b[2].value, stack_b[3].value);
-	// swap(stack_a);
-    // // rotate(stack_a);
-	// printf("stack_a = %d)%d\t%d)%d\t%d)%d\t%d)%d\n", stack_a[0].index, stack_a[0].value, stack_a[1].index, stack_a[1].value, stack_a[2].index, stack_a[2].value, stack_a[3].index, stack_a[3].value);
-	// printf("stack_b = %d, %d, %d, %d\n", stack_b[0].value, stack_b[1].value, stack_b[2].value, stack_b[3].value);
-    
-		i = 0;
+	i = 0;
 	printf("a1:\t");
 	while(i < count_elems(stack_a) + 2)
 	{
-		printf("%d)%d\t", stack_a[i].index, stack_a[i].value);
+		printf("%d)%d>%d\t", stack_a[i].index, stack_a[i].value, stack_a[i].target);
 		i++;
 	}
 	printf("\n");
@@ -236,7 +283,7 @@ int	main(int ac, char **av)
 	printf("b1:\t");
 	while(i < count_elems(stack_b) + 2)
 	{
-		printf("%d)%d\t", stack_b[i].index, stack_b[i].value);
+		printf("%d)%d>%d\t", stack_b[i].index, stack_b[i].value, stack_b[i].target);
 		i++;
 	}
 	printf("\n_______\n\n");
@@ -244,12 +291,11 @@ int	main(int ac, char **av)
 	
 	push(stack_a, stack_b);
 	push(stack_a, stack_b);
-	push(stack_a, stack_b);
-	// set_targets(stack_a, stack_b);
+	set_targets_descend(stack_a, stack_b);
 	printf("a2:\t");
 	while(i < count_elems(stack_a) + 2)
 	{
-		printf("%d)%d\t", stack_a[i].index, stack_a[i].value);
+		printf("%d)%d>%d\t", stack_a[i].index, stack_a[i].value, stack_a[i].target);
 		i++;
 	}
 	printf("\n");
@@ -257,14 +303,11 @@ int	main(int ac, char **av)
 	printf("b2:\t");
 	while(i < count_elems(stack_b) + 2)
 	{
-		printf("%d)%d\t", stack_b[i].index, stack_b[i].value);
+		printf("%d)%d>%d\t", stack_b[i].index, stack_b[i].value, stack_b[i].target);
 		i++;
 	}
     printf("\n");
-    //     printf("\n");
-	// 	    printf("\n");
 
-	// printf("%d\n", count_elems(stack_b));
     
     free(stack_b);
     free(stack_a);
