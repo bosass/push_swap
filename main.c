@@ -243,6 +243,24 @@ void set_targets_descend(t_stack *stack_a, t_stack *stack_b)
 		}
 }
 
+int calc_the_cost(t_stack stack, int a_len, int b_len)
+{
+	if ((a_len / 2) >= stack.index)
+	{
+		if((b_len / 2) >= stack.target)
+			return(stack.index + stack.target);
+		else
+			return(stack.index + b_len - stack.target);
+	}
+	else 
+	{
+		if ((b_len / 2) >= stack.target)
+			return(a_len - stack.index + stack.target);
+		else
+			return(a_len - stack.index + b_len - stack.target);
+	}
+}
+
 int	main(int ac, char **av)
 {
 	t_stack	*stack_a;
@@ -295,7 +313,7 @@ int	main(int ac, char **av)
 	printf("a2:\t");
 	while(i < count_elems(stack_a) + 2)
 	{
-		printf("%d)%d>%d\t", stack_a[i].index, stack_a[i].value, stack_a[i].target);
+		printf("%d)%d>%d(%d)\t", stack_a[i].index, stack_a[i].value, stack_a[i].target, calc_the_cost(stack_a[i], count_elems(stack_a), count_elems(stack_b)));
 		i++;
 	}
 	printf("\n");
