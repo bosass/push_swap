@@ -247,19 +247,33 @@ int calc_the_cost(t_stack stack, int a_len, int b_len)
 {
 	if ((a_len / 2) >= stack.index)
 	{
-		if((b_len / 2) >= stack.target)
-			return(stack.index + stack.target);
+		if ((b_len / 2) >= stack.target)
+			if (stack.index >= stack.target)
+				return (stack.index);
+			else
+				return (stack.target);
 		else
-			return(stack.index + b_len - stack.target);
+			return (stack.index + b_len - stack.target);
 	}
 	else 
 	{
 		if ((b_len / 2) >= stack.target)
-			return(a_len - stack.index + stack.target);
+			return (a_len - stack.index + stack.target);
 		else
-			return(a_len - stack.index + b_len - stack.target);
+			if (a_len - stack.index >= b_len - stack.target)
+				return (a_len - stack.index);
+			else 
+				return (b_len - stack.target);
 	}
 }
+
+
+// int find_cheapest(t_stack *stack_a, t_stack *stack_b)
+// {
+// 	int i;
+
+// 	calc_the_cost(stack_a[i], count_elems(stack_a), count_elems(stack_b));
+// }
 
 int	main(int ac, char **av)
 {
@@ -309,7 +323,9 @@ int	main(int ac, char **av)
 	
 	push(stack_a, stack_b);
 	push(stack_a, stack_b);
+		push(stack_a, stack_b);
 	set_targets_descend(stack_a, stack_b);
+	
 	printf("a2:\t");
 	while(i < count_elems(stack_a) + 2)
 	{
