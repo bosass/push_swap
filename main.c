@@ -219,78 +219,114 @@ int	calc_the_cost(t_stack stack, int a_len, int b_len)
 }
 void swap_a(t_stack *stack)
 {
-	swap(stack);
-	write(1, "sa\n", 3);
+    if(count_elems(stack) >= 2)
+	{
+        swap(stack);
+	    write(1, "sa\n", 3);
+    }
 }
 void swap_b(t_stack *stack)
 {
-	swap(stack);
-	write(1, "sb\n", 3);
+    if(count_elems(stack) >= 2)
+	{
+        swap(stack);
+        write(1, "sb\n", 3);
+    }
 } 
 void swap_both(t_stack *stack_a, t_stack *stack_b)
 {
-	swap(stack_a);
-	swap(stack_b);
-	write(1, "ss\n", 3);
+    int a_len = count_elems(stack_a);
+    int b_len = count_elems(stack_b);
+    if((a_len == 0 || a_len == 1) && b_len >= 2)
+        swap_b(stack_b);
+    else if((b_len == 0 || b_len == 1) && a_len >= 2)
+        swap_a(stack_a);
+    else if(b_len >= 2 && a_len >= 2)
+    {
+        swap(stack_a);
+        swap(stack_b);
+        write(1, "ss\n", 3);
+    }
 } 
 void push_a(t_stack *from, t_stack *to)
 {
-	push(from, to);
-	write(1, "pa\n", 3);
+    if(count_elems(from) >= 1)
+    {
+        push(from, to);
+        write(1, "pa\n", 3);
+    }
 }
 
 void push_b(t_stack *from, t_stack *to)
 {
-	push(from, to);
-	write(1, "pb\n", 3);
+    if(count_elems(from) >= 1)
+    {
+        push(from, to);
+        write(1, "pb\n", 3);
+    }
 }
 void rotate_a(t_stack *stack)
 {
-	rotate(stack);
-	write(1, "ra\n", 3);
+    if(count_elems(stack) >= 2)
+    {
+        rotate(stack);
+        write(1, "ra\n", 3);
+    }
 }
 void rotate_b(t_stack *stack)
 {
-	rotate(stack);
-	write(1, "rb\n", 3);
+    if(count_elems(stack) >= 2)
+    {
+        rotate(stack);
+        write(1, "rb\n", 3);
+    }
 }
 void rotate_both(t_stack *stack_a, t_stack *stack_b)
 {
-	rotate(stack_a);
-	rotate(stack_b);
-	write(1, "rr\n", 3);
+    int a_len = count_elems(stack_a);
+    int b_len = count_elems(stack_b);
+    if((a_len == 0 || a_len == 1) && b_len >= 2)
+        rotate_b(stack_b);
+    else if((b_len == 0 || b_len == 1) && a_len >= 2)
+        rotate_a(stack_a);
+    else if (b_len >= 2 && a_len >= 2)
+    {
+	    rotate(stack_a);
+	    rotate(stack_b);
+	    write(1, "rr\n", 3);
+    }
 }
 void rev_rotate_a(t_stack *stack)
 {
-	rev_rotate(stack);
-	write(1, "rra\n", 4);
+    if(count_elems(stack) >= 2)
+    {
+        rev_rotate(stack);
+        write(1, "rra\n", 4);
+    }
 }
 void rev_rotate_b(t_stack *stack)
 {
-	rev_rotate(stack);
-	write(1, "rrb\n", 4);
+    if(count_elems(stack) >= 2)
+    {
+        rev_rotate(stack);
+        write(1, "rrb\n", 4);
+    }
 }
 void rev_rotate_both(t_stack *stack_a, t_stack *stack_b)
 {
-	rev_rotate(stack_a);
-	rev_rotate(stack_b);
-	write(1, "rrr\n", 4);
+    int a_len = count_elems(stack_a);
+    int b_len = count_elems(stack_b);
+    if((a_len == 0 || a_len == 1) && b_len >= 2)
+        rev_rotate_b(stack_b);
+    else if((b_len == 0 || b_len == 1) && a_len >= 2)
+        rev_rotate_a(stack_a);
+    else if(b_len >= 2 && a_len >= 2)
+    {
+        rev_rotate(stack_a);
+        rev_rotate(stack_b);
+        write(1, "rrr\n", 4);
+    }
 }
-
-// void do_the_thing(t_stack *stack_a, t_stack *stack_b)
-// {
-//     int a_len;
-
-//     a_len = count_elems(stack_a);
-//     if(a_len == 2 && !is_sorted(stack_a))
-// 		swap_a(stack_a);
-//     else if(a_len == 3 && !is_sorted(stack_a))
-//         sort_three(stack_a);
-//     while(a_len > 0)
-//     {
-		
-//     }
-// }
 
 int	find_index_of_min_value(t_stack *stack)
 {
@@ -366,21 +402,7 @@ int	find_index_of_closest_bigger(int number, t_stack *stack)
 	}
 	return (temp);
 }
-// void set_targets_ascend(t_stack *stack_b, t_stack *stack_a)	// closest bigger
-// {
-// 	int b_len;
-// 	int i;
 
-// 	i = 0;
-// 	b_len = count_elems(stack_b);
-// 		while (i < b_len + 1)			
-// 		{
-// 			stack_b[i].target = find_index_of_closest_bigger(stack_b[i].value, stack_a);
-// 			if(stack_b[i].target == -1)
-// 				stack_b[i].target = find_index_of_min_value(stack_a);
-// 			i++;
-// 		}
-// }
 void set_targets_ascend(t_stack *stack_a, t_stack *stack_b)	// closest bigger
 {
 	int ac;
@@ -480,6 +502,29 @@ void both_down(t_stack *stack_a, t_stack *stack_b, int lowest_cost)
 		rev_rotate_a(stack_a);
 	}
 }
+void rev_both_down(t_stack *stack_a, t_stack *stack_b, int lowest_cost)
+{
+	int i;
+	int b_val;
+	int a_val;
+	i = 0;
+	b_val = stack_b[stack_a[lowest_cost].target].value; 
+	a_val = stack_a[lowest_cost].value;
+	if (count_elems(stack_a) - stack_a[lowest_cost].index <= count_elems(stack_b) - stack_a[lowest_cost].target)
+	{
+		while(stack_a[0].value != a_val)
+		rev_rotate_both(stack_a, stack_b);
+		while(stack_b[0].value != b_val)
+		rev_rotate_a(stack_b);
+	}
+	else
+	{
+		while(stack_b[0].value != b_val)
+		rev_rotate_both(stack_a, stack_b);
+		while(stack_a[0].value != a_val)
+		rev_rotate_b(stack_a);
+	}
+}
 void a_down_b_up(t_stack *stack_a, t_stack *stack_b, int lowest_cost)
 {
 	int i;
@@ -493,6 +538,20 @@ void a_down_b_up(t_stack *stack_a, t_stack *stack_b, int lowest_cost)
 	rev_rotate_a(stack_a);
 	while(stack_b[0].value != b_val)
 	rotate_b(stack_b);
+}
+void rev_a_down_b_up(t_stack *stack_a, t_stack *stack_b, int lowest_cost)
+{
+	int i;
+	int b_val;
+	int a_val;
+	i = 0;
+	b_val = stack_b[stack_a[lowest_cost].target].value; 
+	a_val = stack_a[lowest_cost].value;
+	
+	while(stack_a[0].value != a_val)
+	rev_rotate_b(stack_a);
+	while(stack_b[0].value != b_val)
+	rotate_a(stack_b);
 }
 
 void a_up_b_down(t_stack *stack_a, t_stack *stack_b, int lowest_cost)
@@ -510,6 +569,21 @@ void a_up_b_down(t_stack *stack_a, t_stack *stack_b, int lowest_cost)
 	while(stack_b[0].value != b_val)
         rev_rotate_b(stack_b);
 }
+void rev_a_up_b_down(t_stack *stack_a, t_stack *stack_b, int lowest_cost)
+{
+	int i;
+	int b_val;
+	int a_val;
+	i = 0;
+	b_val = stack_b[stack_a[lowest_cost].target].value; 
+	a_val = stack_a[lowest_cost].value;
+	
+	while(stack_a[0].value != a_val)
+        rotate_b(stack_a);
+	i = 0;
+	while(stack_b[0].value != b_val)
+        rev_rotate_a(stack_b);
+}
 
 void both_up(t_stack *stack_a, t_stack *stack_b, int lowest_cost)
 {
@@ -517,8 +591,8 @@ void both_up(t_stack *stack_a, t_stack *stack_b, int lowest_cost)
 	int b_val;
 	int a_val;
 	i = 0;
-	b_val = stack_b[stack_a[lowest_cost].target].value; // --3
-	a_val = stack_a[lowest_cost].value;	// --5
+	b_val = stack_b[stack_a[lowest_cost].target].value;
+	a_val = stack_a[lowest_cost].value;
 	if (a_val >= b_val)
 	{
 		while(stack_b[0].value != b_val)
@@ -540,18 +614,48 @@ void both_up(t_stack *stack_a, t_stack *stack_b, int lowest_cost)
 		    rotate_b(stack_b);
 	}
 }
+void rev_both_up(t_stack *stack_a, t_stack *stack_b, int lowest_cost)
+{
+	int i;
+	int b_val;
+	int a_val;
+	i = 0;
+	b_val = stack_b[stack_a[lowest_cost].target].value;
+	a_val = stack_a[lowest_cost].value;
+	if (a_val >= b_val)
+	{
+		while(stack_b[0].value != b_val)
+        {
+		    rotate_both(stack_a, stack_b);
+            i++;
+        }
+		while(stack_a[0].value != a_val)
+		{   
+            rotate_b(stack_a);
+            i++;
+        }
+	}
+	else
+	{
+		while(stack_a[i].value != a_val)
+		    rotate_both(stack_a, stack_b);
+		while(stack_b[i].value != b_val)
+		    rotate_a(stack_b);
+	}
+}
+
 void check_polarity(t_stack *stack_a, t_stack *stack_b, int super_index)
 {
-	if (super_index < count_elems(stack_a) / 2)// if our star is above this trash 
+	if (super_index < count_elems(stack_a) / 2)
 	{
-		if (stack_a[super_index].target < count_elems(stack_b) / 2)// if malibu is above this trash
-			both_up(stack_a, stack_b, super_index); // move there
+		if (stack_a[super_index].target < count_elems(stack_b) / 2)
+			both_up(stack_a, stack_b, super_index);
 		else
 			a_up_b_down(stack_a, stack_b, super_index);
 	}
-	else // life of poverty
+	else
 	{
-		if (stack_a[super_index].target < count_elems(stack_b) / 2) // we aiming big
+		if (stack_a[super_index].target < count_elems(stack_b) / 2)
 			a_down_b_up(stack_a, stack_b, super_index);
 		else
 			both_down(stack_a, stack_b, super_index);
@@ -564,8 +668,8 @@ void good_shi(t_stack *stack_b, t_stack *stack_a, int super_index)
 	int store_target;
 	int store_index;
 	i = 0;
-	store_target = stack_b[super_index].target; // --3
-	store_index = stack_b[super_index].index;	// --5
+	store_target = stack_b[super_index].target;
+	store_index = stack_b[super_index].index;
 	if (store_index >= store_target)
 	{
 		while(++i <= store_target)
@@ -633,26 +737,25 @@ void final_countdown(t_stack *stack_b, t_stack *stack_a, int super_index)
 		rev_rotate_a(stack_a);
 	}
 }
-void reverse_polarity(t_stack *stack_b, t_stack *stack_a, int super_index)
+void reverse_polarity(t_stack *stack_a, t_stack *stack_b, int super_index)
 {
-	if (super_index < count_elems(stack_b) / 2) // boy was from white neibrhd 
+	if (super_index < count_elems(stack_a) / 2)
 	{
-		if (stack_b[super_index].target < count_elems(stack_a) / 2)
-			good_shi(stack_b, stack_a, super_index);
+		if (stack_a[super_index].target < count_elems(stack_b) / 2)
+			rev_both_up(stack_a, stack_b, super_index); 
 		else
-			gheto_life;
+			rev_a_up_b_down(stack_a, stack_b, super_index);
 	}
-	else // life of poverty
+	else 
 	{
-		if (stack_b[super_index].target < count_elems(stack_b) / 2) // we aiming big
-			get_me_out(stack_a, stack_b, super_index);
+		if (stack_a[super_index].target < count_elems(stack_b) / 2)
+			rev_a_down_b_up(stack_a, stack_b, super_index);
 		else
-			final_countdown(stack_a, stack_b, super_index);
+			rev_both_down(stack_a, stack_b, super_index);
 	}
 
 }
-
-void turk_thing(t_stack *stack_a, t_stack *stack_b)
+void print_turk_thing(t_stack *stack_a, t_stack *stack_b)
 {
 	int i;
 	int a_len;
@@ -666,46 +769,78 @@ void turk_thing(t_stack *stack_a, t_stack *stack_b)
 	set_targets_descend(stack_a, stack_b);
 	while(count_elems(stack_a) > 3)
 	{
-					// printf("!%d!\n", find_index_of_cheapest(stack_a, b_len));
-					// printf("a%d:\t", i);
-					// print_stack(stack_a);
-					// printf("b%d:\t", i);
-					// print_stack(stack_b);
-					// i++;
+					printf("!%d!\n", find_index_of_cheapest(stack_a, b_len));
+					printf("a%d:\t", i);
+					print_stack(stack_a);
+					printf("b%d:\t", i);
+					print_stack(stack_b);
+					i++;
 					
 		set_targets_descend(stack_a, stack_b);
 		check_polarity(stack_a, stack_b, find_index_of_cheapest(stack_a, b_len));
 		push_b(stack_a, stack_b);
 		b_len = count_elems(stack_b);
-		
-					// printf("a%d:\t", i);
-					// print_stack(stack_a);
-					// printf("b%d:\t", i);
-					// print_stack(stack_b);
-					// i++;
 	}
 	sort_three(stack_a);
 	set_targets_ascend(stack_b, stack_a);
 	a_len = count_elems(stack_a);
 	b_len = count_elems(stack_b);
-					// printf("!-----------------------------==========************!\n"); // b9:     0)35>0
-					// printf("a%d:\t", i);
-					// print_stack(stack_a);
-					// printf("b%d:\t", i);
-					// print_stack(stack_b);
-					// i++;
+					printf("!-----------------------------==========************!\n");
+					printf("a%d:\t", i);
+					print_stack(stack_a);
+					printf("b%d:\t", i);
+					print_stack(stack_b);
+					i++;
 	while(b_len > 0)
 	{
 		set_targets_ascend(stack_b, stack_a);
 
-					// printf("!%d!\n", find_index_of_cheapest(stack_b, b_len));
-					// printf("a%d:\t", i);
-					// print_stack(stack_a);
-					// printf("b%d:\t", i);
-					// print_stack(stack_b);
-					// i++;
+					printf("!%d!\n", find_index_of_cheapest(stack_b, b_len));
+					printf("a%d:\t", i);
+					print_stack(stack_a);
+					printf("b%d:\t", i);
+					print_stack(stack_b);
+					i++;
 		
-		check_polarity(stack_b, stack_a, find_index_of_cheapest(stack_b, a_len));
+		reverse_polarity(stack_b, stack_a, find_index_of_cheapest(stack_b, a_len));
+		push_a(stack_b, stack_a);
+		a_len = count_elems(stack_a);
+		b_len = count_elems(stack_b);
+	}
+	i = find_index_of_min_value(stack_a);
+	while(i > 0)
+	{
+		rotate_a(stack_a);
+		i--;
+	}
+}
+void turk_thing(t_stack *stack_a, t_stack *stack_b)
+{
+	int i;
+	int a_len;
+	int b_len;
+	
+	i = 0;
+	push_b(stack_a, stack_b);
+	push_b(stack_a, stack_b);
+	a_len = count_elems(stack_a);
+	b_len = count_elems(stack_b);
+	set_targets_descend(stack_a, stack_b);
+	while(count_elems(stack_a) > 3)
+	{			
+		set_targets_descend(stack_a, stack_b);
+		check_polarity(stack_a, stack_b, find_index_of_cheapest(stack_a, b_len));
+		push_b(stack_a, stack_b);
+		b_len = count_elems(stack_b);
+	}
+	sort_three(stack_a);
+	set_targets_ascend(stack_b, stack_a);
+	a_len = count_elems(stack_a);
+	b_len = count_elems(stack_b);
+	while(b_len > 0)
+	{
+		set_targets_ascend(stack_b, stack_a);
+		reverse_polarity(stack_b, stack_a, find_index_of_cheapest(stack_b, a_len));
 		push_a(stack_b, stack_a);
 		a_len = count_elems(stack_a);
 		b_len = count_elems(stack_b);
@@ -725,7 +860,6 @@ int	main(int ac, char **av)
 	char **list;
 	int i = 0;
 	
-	
 	if (ac == 2)
 		list = ft_split(av[1], ' ');
 	else 
@@ -737,7 +871,6 @@ int	main(int ac, char **av)
 	{
 		stack_a[i].value = atoi(list[i]);
 		stack_a[i].index = i;
-		// stack_a[i].target = 0;
 		i++;
 	}
 	stack_a[i].value = 0;
@@ -745,19 +878,13 @@ int	main(int ac, char **av)
 	
 	stack_b[0].value = 0;
 	stack_b[0].index = -1; 
-	
-	
-	turk_thing(stack_a, stack_b);
 
-
-	// print_stack(stack_a);
-	// print_stack(stack_b);
-	
-	
-
-
-	// printf("\n");
-
+    if(count_elems(stack_a) == 3)
+        sort_three;
+    else if(count_elems(stack_a) == 4)
+        sort_four;
+    else if(count_elems(stack_a) >= 5)
+        turk_thing(stack_a, stack_b);
 
 	free(stack_b);
 	free(stack_a);
